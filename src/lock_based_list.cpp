@@ -73,7 +73,7 @@ public:
     void remove(size_t index)
     {
         lock_guard<mutex> lock(m);
-        if (index >= 0 && index < size)
+        if (index > 0 && index < size)
         {
             node* current_node = head.next.get();
             size_t i = 0;
@@ -86,6 +86,13 @@ public:
             node* const next = current_node->next.get();
             unique_ptr<node> old_next = move(current_node->next);
             current_node->next = move(next->next);
+            size--;
+        }
+        else if (index == 0)
+        {
+            node* const next = head.next.get();
+            unique_ptr<node> old_next = move(head.next);
+            head.next = move(next->next);
             size--;
         }
     }
